@@ -1,28 +1,23 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import {Link} from 'react-router-dom'
-export default class Posts extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      posts: []
-    };
-  }
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { fetchPosts } from '../../actions/post-action';
+class Posts extends Component {
   componentWillMount() {
-    axios.get(`https://jsonplaceholder.typicode.com/posts`).then(response => {
-      this.setState({ posts: response.data });
-    });
+    this.props.fetchPosts();
   }
   render() {
     return (
       <div>
         <div className="d-flex">
-        <Link to="/addpost" className="btn-primary btn btn-sm"> Add New Post</Link>
+          <Link to="/addpost" className="btn-primary btn btn-sm">
+            {'Add New Post'}
+          </Link>
         </div>
-        {this.state.posts.map(post => {
+        {this.props.posts.map(post => {
           return (
             <div className="card mt-2" key={post.id}>
-              <div class="card-body">
+              <div className="card-body">
                 <h3 className="mr-4">{post.title}</h3>
                 <p>{post.body}</p>
               </div>
@@ -33,3 +28,11 @@ export default class Posts extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  posts: state.posts.items
+});
+export default connect(
+  mapStateToProps,
+  { fetchPosts }
+)(Posts);
