@@ -6,6 +6,11 @@ class Posts extends Component {
   componentWillMount() {
     this.props.fetchPosts();
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.newPost) {
+      this.props.posts.unshift(nextProps.newPost);
+    }
+  }
   render() {
     return (
       <div>
@@ -30,7 +35,8 @@ class Posts extends Component {
 }
 
 const mapStateToProps = state => ({
-  posts: state.posts.items
+  posts: state.posts.items,
+  newPost: state.posts.item
 });
 export default connect(
   mapStateToProps,

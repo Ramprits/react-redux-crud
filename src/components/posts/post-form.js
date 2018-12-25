@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { createPost } from '../../actions/post-action';
 
-export default class PostForm extends Component {
+class PostForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,7 +20,7 @@ export default class PostForm extends Component {
       title: this.state.title,
       body: this.state.body
     };
-    axios.post(`https://jsonplaceholder.typicode.com/posts`,post).then((res)=>{console.log(res)})
+    this.props.createPost(post);
   }
   onChangeInput(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -62,3 +63,7 @@ export default class PostForm extends Component {
     );
   }
 }
+export default connect(
+  null,
+  { createPost }
+)(PostForm);
